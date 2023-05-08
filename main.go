@@ -45,35 +45,35 @@ func main() {
 		var wg sync.WaitGroup
 		for i := 0; i < len(allNodes); i++ {
 			wg.Add(1)
-			go func(num int, w *sync.WaitGroup) {
+			go func(node string, w *sync.WaitGroup) {
 				defer w.Done()
 				for cmd := range tasks {
-					log.Println("[", num, "]", "scp copy start..")
+					log.Println(fmt.Sprintf("[ %s ] ", node), "scp copy start..")
 					if err := cmd[0].Run(); err != nil {
-						log.Println("[", num, "]", "scp copy fail", err)
+						log.Println(fmt.Sprintf("[ %s ] ", node), "scp copy fail", err)
 						stepIsOK = false
 						return
 					} else {
-						log.Println("[", num, "]", "scp copy end :", cmd[0])
+						log.Println(fmt.Sprintf("[ %s ] ", node), "scp copy end :")
 					}
-					log.Println("[", num, "]", "install k8s set up start..")
+					log.Println(fmt.Sprintf("[ %s ] ", node), "install k8s set up start..")
 					if err := cmd[1].Run(); err != nil {
-						log.Println("[", num, "]", "install k8s set up fail", err)
+						log.Println(fmt.Sprintf("[ %s ] ", node), "install k8s set up fail", err)
 						stepIsOK = false
 						return
 					} else {
-						log.Println("[", num, "]", "install k8s set up end", cmd[1])
+						log.Println(fmt.Sprintf("[ %s ] ", node), "install k8s set up end")
 					}
-					log.Println("[", num, "]", "agent start..")
+					log.Println(fmt.Sprintf("[ %s ] ", node), "agent start..")
 					if err := cmd[2].Start(); err != nil {
-						log.Println("[", num, "]", "agent start fail", err)
+						log.Println(fmt.Sprintf("[ %s ] ", node), "agent start fail", err)
 						stepIsOK = false
 						return
 					} else {
-						log.Println("[", num, "]", "agent is now running", cmd[2])
+						log.Println(fmt.Sprintf("[ %s ] ", node), "agent is now running")
 					}
 				}
-			}(i, &wg)
+			}(allNodes[i], &wg)
 		}
 		for _, node := range allNodes {
 			tasks <- []*exec.Cmd{

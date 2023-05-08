@@ -1,9 +1,9 @@
 user: root
 password: 1234
 masters:
-  - 3.35.206.136
+  - 43.201.85.102
 workers:
-  - 3.39.222.203
+  - 3.35.140.219
 k8s_version: v1.21.0
 pod_network_cidr: 10.244.0.0/16
 control_plane_endpoint:
