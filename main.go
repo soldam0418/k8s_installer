@@ -21,7 +21,7 @@ func main() {
 	serverOrAgent := os.Args[1]
 	switch serverOrAgent {
 	case "server":
-		log.Println("#### [1/4] SCP Agent to nodes & Run Agent ####")
+		log.Println("#### [1/5] SCP Agent to nodes & Run Agent ####")
 		var err error
 		cfg := &src.Config{}
 		// Read Config file. ${pwd}/config.yaml
@@ -91,7 +91,7 @@ func main() {
 		log.Println("SCP Agent to nodes & Run success")
 
 		time.Sleep(5 * time.Second)
-		log.Println("#### [2/4] Kubeadm Init Start  ####")
+		log.Println("#### [2/5] Kubeadm Init Start  ####")
 		log.Println("kubeadm init from [", cfg.Masters[0], "] start..")
 		reqJson := src.KubeadmConfig{
 			K8sVersion:           cfg.K8sVersion,
