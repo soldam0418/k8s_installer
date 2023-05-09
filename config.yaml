@@ -1,9 +1,13 @@
-user: root
-password: 1234
+user: { { UserName } }
+password: { { Password } }
 masters:
-  - 43.201.85.102
+  - { { Master1 ip } }
+  - { { Master2 ip } }
+  - { { ... } }
 workers:
-  - 3.35.140.219
-k8s_version: v1.21.0
-pod_network_cidr: 10.244.0.0/16
-control_plane_endpoint:
+  - { { Worker1 ip } }
+  - { { Worker2 ip } }
+  - { { ... } }
+k8s_version: v1.21.0 # used to kubeadm version option
+pod_network_cidr: 10.244.0.0/16 # current cni setting is Flannel
+control_plane_endpoint: { { LB or Proxy Server IP } }

@@ -54,7 +54,7 @@ func main() {
 						stepIsOK = false
 						return
 					} else {
-						log.Println(fmt.Sprintf("[ %s ] ", node), "scp copy end :")
+						log.Println(fmt.Sprintf("[ %s ] ", node), "scp copy end")
 					}
 					log.Println(fmt.Sprintf("[ %s ] ", node), "install k8s set up start..")
 					if err := cmd[1].Run(); err != nil {
@@ -88,9 +88,9 @@ func main() {
 			log.Fatal("Fail to Setup")
 			return
 		}
-		time.Sleep(5 * time.Second)
 		log.Println("SCP Agent to nodes & Run success")
 
+		time.Sleep(5 * time.Second)
 		log.Println("#### [2/4] Kubeadm Init Start  ####")
 		log.Println("kubeadm init from [", cfg.Masters[0], "] start..")
 		reqJson := src.KubeadmConfig{

@@ -20,8 +20,9 @@ func KubeadmHandler(c echo.Context) error {
 	if u.ControlPlaneEndpoint != "" {
 		command = exec.Command("sudo", "kubeadm", "init", "--kubernetes-version", u.K8sVersion,
 			"--control-plane-endpoint", u.ControlPlaneEndpoint, "--pod-network-cidr", u.PodNetworkCidr, "--upload-certs")
+	} else {
+		command = exec.Command("sudo", "kubeadm", "init", "--kubernetes-version", u.K8sVersion, "--pod-network-cidr", u.PodNetworkCidr, "--upload-certs")
 	}
-	command = exec.Command("sudo", "kubeadm", "init", "--kubernetes-version", u.K8sVersion, "--pod-network-cidr", u.PodNetworkCidr, "--upload-certs")
 	command.Stdout = &out
 	if err := command.Run(); err != nil {
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("script output: %s \nerr: %s", out.String(), err))
