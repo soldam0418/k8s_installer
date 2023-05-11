@@ -40,11 +40,11 @@ func ParsingKubeadmJoinCMD(kdmStringsArr []string) (masterJoinCMD string, worker
 	}
 	for i, v := range kdmStringsArr {
 		if strings.Contains(v, "--control-plane") {
-			masterJoinCMD = "sudo " + parsingKubeadmJoinStr(kdmStringsArr[i-2:i+1])
+			masterJoinCMD = parsingKubeadmJoinStr(kdmStringsArr[i-2 : i+1])
 		}
 
 		if strings.Contains(v, "--discovery-token-ca-cert-hash") {
-			workerJoinCMD = "sudo " + parsingKubeadmJoinStr(kdmStringsArr[i-1:i+1])
+			workerJoinCMD = parsingKubeadmJoinStr(kdmStringsArr[i-1 : i+1])
 		}
 	}
 	return masterJoinCMD, workerJoinCMD
