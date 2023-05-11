@@ -14,7 +14,3 @@ type KubeadmConfig struct {
 	PodNetworkCidr       string `json:"PodNetworkCidr"`
 	ControlPlaneEndpoint string `json:"ControlPlaneEndpoint"`
 }
-
-type HostCMD struct {
-	CMD string `json:"CMD"`
-}

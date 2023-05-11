@@ -2,30 +2,12 @@ package src
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
+	"os/exec"
 	"strings"
 	"sync"
 )
-
-func HttpPost(jsonData any, url string) (string, error) {
-	pBytes, _ := json.Marshal(jsonData)
-	buff := bytes.NewBuffer(pBytes)
-	resp, err := http.Post(url, "application/json", buff)
-	if err != nil {
-		log.Fatal("Fail to POST http")
-		return "", err
-	}
-	respBody, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-		return "", err
-	}
-	return string(respBody), nil
-}
 
 func ParsingKubeadmJoinCMD(kdmStringsArr []string) (masterJoinCMD string, workerJoinCMD string) {
 	parsingKubeadmJoinStr := func(strArr []string) (mergedStr string) {
@@ -50,33 +32,31 @@ func ParsingKubeadmJoinCMD(kdmStringsArr []string) (masterJoinCMD string, worker
 	return masterJoinCMD, workerJoinCMD
 }
 
-func HttpPostToAllNodesByChannel(wg *sync.WaitGroup, nodes []string, cmd string, isOk *bool) {
-	tasks := make(chan HostCMD)
+func SshCMDToAllNodesByChannel(wg *sync.WaitGroup, nodes []string, cmd string, isOk *bool) {
+	tasks := make(chan string)
 	for i := 0; i < len(nodes); i++ {
 		wg.Add(1)
-		worker := nodes[i]
+		node := nodes[i]
 		go func(num int, ip string, w *sync.WaitGroup, clusteringStatue *bool) {
 			defer w.Done()
-			respBody, err := HttpPost(<-tasks, fmt.Sprintf("http://%s:%s/%s", ip, AGENT_PORT, HOST_CMD_HANDLER_ROUTE))
-			if err != nil {
+			//respBody, err := HttpPost(<-tasks, fmt.Sprintf("http://%s:%s/%s", ip, AGENT_PORT, HOST_CMD_HANDLER_ROUTE))
+			command := &exec.Cmd{}
+			var out bytes.Buffer
+			CMDStr := strings.ReplaceAll(<-tasks, "nodeip", ip)
+			CMDStrArr := strings.Split(CMDStr, " ")
+			command = exec.Command(CMDStrArr[0], CMDStrArr[1:]...)
+			command.Stdout = &out
+			if err := command.Run(); err != nil {
 				*clusteringStatue = false
-				log.Fatal(fmt.Sprintf("[ %s ] node join fail \n err: %s", ip, err))
+				log.Fatal(fmt.Sprintf("[ %s ] fail \n err: %s", ip, err))
 				return
 			}
-			log.Println(respBody)
-			log.Println(fmt.Sprintf("[ %s ] node join complete", ip))
-		}(i, worker, wg, isOk)
+			log.Println(fmt.Sprintf("[ %s ] success complete", ip))
+		}(i, node, wg, isOk)
 	}
 	for i := 0; i < len(nodes); i++ {
-		tasks <- HostCMD{CMD: cmd}
+		tasks <- cmd
 	}
 	close(tasks)
 	wg.Wait()
-}
-
-func TerminateAgent(allNodes []string) {
-	for _, node := range allNodes {
-		terminateAgentCMD := fmt.Sprintf("http://%s:%s/%s", node, AGENT_PORT, TERMINATE_AGENT_ROUTE)
-		_, _ = http.Get(terminateAgentCMD)
-	}
 }
