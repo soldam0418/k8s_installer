@@ -78,8 +78,8 @@ func main() {
 		for _, node := range allNodes {
 			tasks <- []*exec.Cmd{
 				exec.Command("sshpass", "scp", "-o", "StrictHostKeyChecking=no", src.K8S_INSTALLER, src.K8S_SETUP_SCRIPT, fmt.Sprintf("%s@%s:/home1/irteamsu", cfg.User, node)),
-				exec.Command("sshpass", "ssh", "-o", "StrictHostKeyChecking=no", fmt.Sprintf("%s@%s", cfg.User, node), "sudo", "sh", fmt.Sprintf("/home1/irteamsu/%s", src.K8S_SETUP_SCRIPT)),
-				exec.Command("sshpass", "ssh", "-o", "StrictHostKeyChecking=no", fmt.Sprintf("%s@%s", cfg.User, node), "sudo", fmt.Sprintf("/home1/irteamsu/%s", src.K8S_INSTALLER), "agent"),
+				exec.Command("sshpass", "ssh", "-o", "StrictHostKeyChecking=no", fmt.Sprintf("%s@%s", cfg.User, node), "sh", fmt.Sprintf("/home1/irteamsu/%s", src.K8S_SETUP_SCRIPT)),
+				exec.Command("sshpass", "ssh", "-o", "StrictHostKeyChecking=no", fmt.Sprintf("%s@%s", cfg.User, node), fmt.Sprintf("/home1/irteamsu/%s", src.K8S_INSTALLER), "agent"),
 			}
 		}
 		close(tasks)
@@ -131,7 +131,7 @@ func main() {
 		}
 		for i := 0; i < filesCnt; i++ {
 			err := exec.Command("sshpass", "ssh", "-o", "StrictHostKeyChecking=no",
-				fmt.Sprintf("%s@%s", cfg.User, cfg.Masters[0]), "sudo", "sh", fmt.Sprintf("/home1/irteamsu/%s/%d*", src.EXTRA_SCRIPT, i+1)).Run()
+				fmt.Sprintf("%s@%s", cfg.User, cfg.Masters[0]), "sh", fmt.Sprintf("/home1/irteamsu/%s/%d*", src.EXTRA_SCRIPT, i+1)).Run()
 			if err != nil {
 				log.Println("fail to execute bash script.", fmt.Sprintf("%d_{script} excute fail. ", i+1), "err: ", err.Error())
 			} else {
