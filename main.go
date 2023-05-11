@@ -85,7 +85,7 @@ func main() {
 		close(tasks)
 		wg.Wait()
 		if !stepIsOK {
-			log.Fatal("Fail to Setup")
+			log.Fatal(fmt.Sprintf("Fail to Setup. Check Agent port: %s is open.", src.AGENT_PORT))
 			return
 		}
 		log.Println("SCP Agent to nodes & Run success")

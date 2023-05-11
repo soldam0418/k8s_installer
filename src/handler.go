@@ -18,10 +18,10 @@ func KubeadmHandler(c echo.Context) error {
 	command := &exec.Cmd{}
 	var out bytes.Buffer
 	if u.ControlPlaneEndpoint != "" {
-		command = exec.Command("sudo", "kubeadm", "init", "--kubernetes-version", u.K8sVersion,
+		command = exec.Command("kubeadm", "init", "--kubernetes-version", u.K8sVersion,
 			"--control-plane-endpoint", u.ControlPlaneEndpoint, "--pod-network-cidr", u.PodNetworkCidr, "--upload-certs")
 	} else {
-		command = exec.Command("sudo", "kubeadm", "init", "--kubernetes-version", u.K8sVersion, "--pod-network-cidr", u.PodNetworkCidr, "--upload-certs")
+		command = exec.Command("kubeadm", "init", "--kubernetes-version", u.K8sVersion, "--pod-network-cidr", u.PodNetworkCidr, "--upload-certs")
 	}
 	command.Stdout = &out
 	if err := command.Run(); err != nil {
