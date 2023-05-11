@@ -77,9 +77,9 @@ func main() {
 		}
 		for _, node := range allNodes {
 			tasks <- []*exec.Cmd{
-				exec.Command("sshpass", "-p", cfg.Password, "scp", "-o", "StrictHostKeyChecking=no", src.K8S_INSTALLER, src.K8S_SETUP_SCRIPT, fmt.Sprintf("%s@%s:/home", cfg.User, node)),
-				exec.Command("sshpass", "-p", cfg.Password, "ssh", "-o", "StrictHostKeyChecking=no", fmt.Sprintf("%s@%s", cfg.User, node), "sudo", "sh", fmt.Sprintf("/home/%s", src.K8S_SETUP_SCRIPT)),
-				exec.Command("sshpass", "-p", cfg.Password, "ssh", "-o", "StrictHostKeyChecking=no", fmt.Sprintf("%s@%s", cfg.User, node), "sudo", fmt.Sprintf("/home/%s", src.K8S_INSTALLER), "agent"),
+				exec.Command("sshpass", "scp", "-o", "StrictHostKeyChecking=no", src.K8S_INSTALLER, src.K8S_SETUP_SCRIPT, fmt.Sprintf("%s@%s:/home1/irteamsu", cfg.User, node)),
+				exec.Command("sshpass", "ssh", "-o", "StrictHostKeyChecking=no", fmt.Sprintf("%s@%s", cfg.User, node), "sudo", "sh", fmt.Sprintf("/home1/irteamsu/%s", src.K8S_SETUP_SCRIPT)),
+				exec.Command("sshpass", "ssh", "-o", "StrictHostKeyChecking=no", fmt.Sprintf("%s@%s", cfg.User, node), "sudo", fmt.Sprintf("/home1/irteamsu/%s", src.K8S_INSTALLER), "agent"),
 			}
 		}
 		close(tasks)
@@ -124,14 +124,14 @@ func main() {
 		files, _ := ioutil.ReadDir(src.EXTRA_SCRIPT)
 		filesCnt := len(files)
 		log.Println(fmt.Sprintf("Total extra script count: %d.", filesCnt))
-		err = exec.Command("sshpass", "-p", cfg.Password, "scp", "-o", "StrictHostKeyChecking=no", "-r", src.EXTRA_SCRIPT,
-			fmt.Sprintf("%s@%s:/home", cfg.User, cfg.Masters[0])).Run()
+		err = exec.Command("sshpass", "scp", "-o", "StrictHostKeyChecking=no", "-r", src.EXTRA_SCRIPT,
+			fmt.Sprintf("%s@%s:/home1/irteamsu", cfg.User, cfg.Masters[0])).Run()
 		if err != nil {
 			log.Println("fail to scp. err: ", err.Error())
 		}
 		for i := 0; i < filesCnt; i++ {
-			err := exec.Command("sshpass", "-p", cfg.Password, "ssh", "-o", "StrictHostKeyChecking=no",
-				fmt.Sprintf("%s@%s", cfg.User, cfg.Masters[0]), "sudo", "sh", fmt.Sprintf("/home/%s/%d*", src.EXTRA_SCRIPT, i+1)).Run()
+			err := exec.Command("sshpass", "ssh", "-o", "StrictHostKeyChecking=no",
+				fmt.Sprintf("%s@%s", cfg.User, cfg.Masters[0]), "sudo", "sh", fmt.Sprintf("/home1/irteamsu/%s/%d*", src.EXTRA_SCRIPT, i+1)).Run()
 			if err != nil {
 				log.Println("fail to execute bash script.", fmt.Sprintf("%d_{script} excute fail. ", i+1), "err: ", err.Error())
 			} else {

@@ -1,9 +1,7 @@
 package src
 
 type Config struct {
-	User string `yaml:"user"`
-	//PemPath              string   `yaml:"pem_path"`
-	Password             string   `yaml:"password"`
+	User                 string   `yaml:"user"`
 	Masters              []string `yaml:"masters"`
 	Workers              []string `yaml:"workers"`
 	K8sVersion           string   `yaml:"k8s_version"`
