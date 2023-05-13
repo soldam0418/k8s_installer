@@ -13,9 +13,9 @@ func ParsingKubeadmJoinCMD(kdmStringsArr []string) (masterJoinCMD string, worker
 	parsingKubeadmJoinStr := func(strArr []string) (mergedStr string) {
 		for i, str := range strArr {
 			if i == 0 {
-				mergedStr += strings.ReplaceAll(str, `\`, "")
-			} else {
 				mergedStr += strings.TrimSpace(strings.ReplaceAll(str, `\`, ""))
+			} else {
+				mergedStr += " " + strings.TrimSpace(strings.ReplaceAll(str, `\`, ""))
 			}
 		}
 		return mergedStr
