@@ -50,7 +50,7 @@
   $ docker run --name k8s-container -itd k8s_container
   # Host Volume 마운트하여 활용 가능 (config 및 script 파일 custom 가능)
   $ docker run --name k8s-container -itd -v ./config.yaml:/app/config.yaml \
-    -v ./k8s_setup.sh:/app/k8s_setup.sh -v ./extra_script:/app/extra_script \
+    -v ./k8s_setup.sh:/app/k8s_setup.sh -v ./config:/app/config \
     k8s_container
   ```
 * Go run Command

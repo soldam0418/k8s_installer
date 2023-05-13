@@ -44,14 +44,16 @@ func SshCMDToAllNodesByChannel(wg *sync.WaitGroup, nodes []string, cmd string, i
 			var out bytes.Buffer
 			CMDStr := strings.ReplaceAll(<-tasks, "nodeip", ip)
 			CMDStrArr := strings.Split(CMDStr, " ")
+			fmt.Println(CMDStrArr)
 			command = exec.Command(CMDStrArr[0], CMDStrArr[1:]...)
+			log.Println(command)
 			command.Stdout = &out
 			if err := command.Run(); err != nil {
 				*clusteringStatue = false
-				log.Fatal(fmt.Sprintf("[ %s ] fail \n err: %s", ip, err))
+				log.Println(fmt.Sprintf("[ %s ] fail \n err: %s", ip, err))
 				return
 			}
-			log.Println(fmt.Sprintf("[ %s ] success complete", ip))
+			log.Println(fmt.Sprintf("[ %s ] success", ip))
 		}(i, node, wg, isOk)
 	}
 	for i := 0; i < len(nodes); i++ {
@@ -59,4 +61,16 @@ func SshCMDToAllNodesByChannel(wg *sync.WaitGroup, nodes []string, cmd string, i
 	}
 	close(tasks)
 	wg.Wait()
+}
+
+func SshCMDToGetOutput(CMDStr string) string {
+	var out bytes.Buffer
+	CMDStrArr := strings.Split(CMDStr, " ")
+	command := exec.Command(CMDStrArr[0], CMDStrArr[1:]...)
+	command.Stdout = &out
+	log.Println(fmt.Sprintf("CMD: %s", command))
+	if err := command.Run(); err != nil {
+		log.Fatal("fail to execute cmd: ", err.Error())
+	}
+	return out.String()
 }

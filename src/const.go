@@ -1,4 +1,6 @@
 package src
 
-const K8S_SETUP_SCRIPT = "k8s_setup.sh"
-const EXTRA_SCRIPT = "extra_script"
+const DEFAULT_CONFIG_DIR_PATH = "./config"
+const INSTALL_MODE = "install"
+const TEST_MODE = "test"
+const RESET_MODE = "reset"
