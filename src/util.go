@@ -32,6 +32,12 @@ func ParsingKubeadmJoinCMD(kdmStringsArr []string) (masterJoinCMD string, worker
 	return masterJoinCMD, workerJoinCMD
 }
 
+func ParsingCommand(CMDStr string) (command *exec.Cmd) {
+	CMDStrArr := strings.Split(CMDStr, " ")
+	command = exec.Command(CMDStrArr[0], CMDStrArr[1:]...)
+	return command
+}
+
 func SshCMDToAllNodesByChannel(wg *sync.WaitGroup, nodes []string, cmd string, isOk *bool) {
 	tasks := make(chan string)
 	for i := 0; i < len(nodes); i++ {
@@ -39,13 +45,9 @@ func SshCMDToAllNodesByChannel(wg *sync.WaitGroup, nodes []string, cmd string, i
 		node := nodes[i]
 		go func(num int, ip string, w *sync.WaitGroup, clusteringStatue *bool) {
 			defer w.Done()
-			//respBody, err := HttpPost(<-tasks, fmt.Sprintf("http://%s:%s/%s", ip, AGENT_PORT, HOST_CMD_HANDLER_ROUTE))
-			command := &exec.Cmd{}
 			var out bytes.Buffer
 			CMDStr := strings.ReplaceAll(<-tasks, "nodeip", ip)
-			CMDStrArr := strings.Split(CMDStr, " ")
-			fmt.Println(CMDStrArr)
-			command = exec.Command(CMDStrArr[0], CMDStrArr[1:]...)
+			command := ParsingCommand(CMDStr)
 			log.Println(command)
 			command.Stdout = &out
 			if err := command.Run(); err != nil {
@@ -65,8 +67,7 @@ func SshCMDToAllNodesByChannel(wg *sync.WaitGroup, nodes []string, cmd string, i
 
 func SshCMDToGetOutput(CMDStr string) string {
 	var out bytes.Buffer
-	CMDStrArr := strings.Split(CMDStr, " ")
-	command := exec.Command(CMDStrArr[0], CMDStrArr[1:]...)
+	command := ParsingCommand(CMDStr)
 	command.Stdout = &out
 	log.Println(fmt.Sprintf("CMD: %s", command))
 	if err := command.Run(); err != nil {

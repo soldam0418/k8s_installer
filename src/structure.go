@@ -8,7 +8,9 @@ import (
 )
 
 type Config struct {
-	User                 string   `yaml:"user"`
+	User                 string
+	Password             string
+	PemPath              string
 	Masters              []string `yaml:"masters"`
 	Workers              []string `yaml:"workers"`
 	K8sVersion           string   `yaml:"k8s_version"`
@@ -25,11 +27,11 @@ func (cfg *Config) GetConfig(configDir string) (err error) {
 	}
 	// Read Config file. ${pwd}/config.yaml
 	if buf, err := ioutil.ReadFile(fmt.Sprintf("%s/config.yaml", configDir)); err != nil {
-		log.Println(err)
+		log.Println("Fail to Read Config file.", err)
 		return err
 	} else {
 		if err = yaml.Unmarshal(buf, cfg); err != nil {
-			log.Println("Unmarshal: %v", err)
+			log.Println(err)
 			return err
 		}
 	}

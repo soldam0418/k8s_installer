@@ -1,4 +1,3 @@
-user: { { UserName } }
 masters:
   - { { Master1 ip } }
   - { { Master2 ip } }
