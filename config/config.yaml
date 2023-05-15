@@ -9,4 +9,4 @@ workers:
   - { { ... } }
 k8s_version: v1.21.0 # used to kubeadm version option
 pod_network_cidr: 10.244.0.0/16 # current cni setting is Flannel
-control_plane_endpoint: { { LB or Proxy Server IP } }
+control_plane_endpoint: { { LB or Proxy Server IP } }:6443
