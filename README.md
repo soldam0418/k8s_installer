@@ -5,16 +5,14 @@
 * golang(v1.20.3) 으로 개발되었으며 모든 작업(Go-routine 기반)은 병렬적으로 수행된다.
 * 실행 가능한 바이너리 파일(Linux/Amd64)과 Config 디렉토리로 구성되어 있으며 hcon 환경에서 정상 구동된다.
 
-## 동작 원리
-* hcon 환경에서 config 디텍토리를 읽어들여 다음과 같은 작업을 수행한다. 
-  * config.yaml 파일 Read
-  * 모든 노드에 k8s_setup.sh 복사(sshpass scp 활용)
-  * 1개의 노드에 kubeadm init 수행
-  * 나머지 노드에게 kubeadm join 수행
-  * Master 노드(1개)에 config/deploy 디렉토리 안의 스크립트 파일 실행 
-
-## 시퀀스 다이어 그램
-![image](https://github.nhnent.com/storage/user/3570/files/57329000-ee71-11ed-85f8-64b01ac9ca20)
+## 동작 과정
+* hcon 환경에서 config 디텍토리를 읽어들여 아래와 같은 5가지 작업을 수행한다. 
+  * (1) 모든 노드에 k8s_setup.sh 복사(sshpass scp 활용)
+  * (2) 모든 노드에 k8s_setup.sh 실행
+  * (3) master 노드 중 1개의 노드에 kubeadm init 수행 및 join 명령어 파싱
+  * (4) 나머지 노드에게 kubeadm join 수행
+  * (5) Master 노드 중 1개의 노드에 config/deploy 디렉토리 안의 스크립트 파일 실행
+ * 각 과정은 순차적으로 수행되며, 실패 시 실패 원인 출력하며 모듈 동작 중지 
 
 ## 구성 요소 상세 설명
 * config 디렉토리
