@@ -17,7 +17,7 @@
 ![image](https://github.nhnent.com/storage/user/3570/files/57329000-ee71-11ed-85f8-64b01ac9ca20)
 
 ## 구성 요소 상세 설명
-<img width="437" alt="image" src="https://github.nhnent.com/storage/user/3570/files/b393c42c-aef7-42bf-a87b-b0160304565b">
+* <img width="437" alt="image" src="https://github.nhnent.com/storage/user/3570/files/b393c42c-aef7-42bf-a87b-b0160304565b">
 * kubenhn 바이너리
   * Linux/Amd64에서 동작하는 바이너리 파일
   * ./kubenhn -h => 옵션 살펴보기
