@@ -15,15 +15,12 @@ func main() {
 
 	var executeMode string
 	flag.StringVar(&executeMode, "m", src.INSTALL_MODE, "kubenhn execute mode. support [\"install\", \"remove\"]")
-	flag.Parse()
 
 	var userName string
 	flag.StringVar(&userName, "u", src.USER, "Instance access user name.")
-	flag.Parse()
 
 	var pemPath string
 	flag.StringVar(&pemPath, "i", "", "PemKey Path.")
-	flag.Parse()
 
 	var password string
 	flag.StringVar(&password, "p", "", "Instance access password")
