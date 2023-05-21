@@ -1,4 +1,4 @@
-package install
+package handler
 
 import (
 	"k8s-installer/src"
@@ -6,29 +6,28 @@ import (
 	"sync"
 )
 
-func Installer(cfg *src.Config, configDir string) {
+func Installer(hs *HandlerStruct, configDir string) {
 	var err error
 	var wg sync.WaitGroup
-	hs := HandlerStruct{}
-	if err = hs.getConfig(cfg, configDir); err != nil {
+	if err = hs.SetHandler(configDir); err != nil {
 		log.Fatal("Config file initialize fail")
 	}
 	log.Println("#### [1/5] SCP k8s_setup Script ####")
 	log.Println("SCP task now processing..")
-	if hs.SCPK8sSetup(&wg) {
-		log.Println("SCP k8s_setup to all nodes success\n")
+	if hs.SCPK8sScript(&wg, src.K8S_SETUP_SCRIPT) {
+		log.Println("SCP k8s_setup.sh to all nodes success\n")
 	} else {
 		// log.Fatal call os.Exit(1)
-		log.Fatal("SCP k8s_setup to some node fail")
+		log.Fatal("SCP k8s_setup.sh to some node fail")
 	}
 
 	log.Println("#### [2/5] Execute Initial Install Script ####")
 	log.Println("Executing task now processing..")
-	if hs.ExecuteK8sSetup(&wg) {
-		log.Println("Execute k8s_setup Script to all nodes success\n")
+	if hs.ExecuteK8sScript(&wg, src.K8S_SETUP_SCRIPT) {
+		log.Println("Execute k8s_setup.sh to all nodes success\n")
 	} else {
 		// log.Fatal call os.Exit(1)
-		log.Fatal("Execute k8s_setup Script to some node fail")
+		log.Fatal("Execute k8s_setup.sh to some node fail")
 	}
 
 	log.Println("#### [3/5] Kubeadm Init Start  ####")
