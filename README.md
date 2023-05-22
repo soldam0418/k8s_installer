@@ -13,9 +13,11 @@ cp -r ~/k8s-installer/config ./
 cp ~/k8s-installer/kubenhn ./
 kubenhn -h
 ```
-<img width="252" alt="image" src="https://github.nhnent.com/storage/user/3570/files/a93465b4-93d4-4be3-88b9-ed0bfe32dfd1">
 
 ## 구성 요소 상세 설명
+
+<img width="252" alt="image" src="https://github.nhnent.com/storage/user/3570/files/a93465b4-93d4-4be3-88b9-ed0bfe32dfd1">
+
 * config 디렉토리
   * config.yaml
     * 인스턴스 정보, k8s 설정 정보 파일
@@ -50,14 +52,14 @@ kubenhn -h
     kubenhn -u sreteam -f /etc/myconfig -m remove -i /etc/mypem.key
     ```
 ## 동작 과정
-* Install Mode
+* Install Mode (각 Task는 순차적으로 진행되며 오류 발생 시 Stop / 실패 Instance 정보 및 error log 출력)
   * config 설정 파일 Load
   * (1) 모든 노드에 k8s_setup.sh 복사 (sshpass scp 활용)
   * (2) 모든 노드에 k8s_setup.sh 실행 (sshpass ssh 활용)
   * (3) master 노드 중 1개의 노드에 kubeadm init 수행 및 join 명령어 파싱
   * (4) 나머지 노드에게 kubeadm join 수행
   * (5) Master 노드 중 1개의 노드에 config/deploy 디렉토리 안의 스크립트 파일 실행
-* Remove Mode
+* Remove Mode (각 Task는 순차적으로 진행되며 오류 발생 시 Stop / 실패 Instance 정보 및 error log 출력)
   * config 설정 파일 Load
   * (1) 모든 노드에 k8s_remove.sh 복사 (sshpass scp 활용)
   * (2) 모든 노드에 k8s_remove.sh 실행 (sshpass ssh 활용)
