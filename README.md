@@ -3,7 +3,8 @@
 ## 모듈 소개
 * N개의 Instance 들을 kubernetes cluster 환경으로 자동 구축해주는 모듈이다.
 * golang(v1.20.3) 으로 개발되었으며 모든 작업(Go-routine 기반)은 병렬적으로 수행된다.
-* 실행 가능한 바이너리 파일(Linux/Amd64)과 Config 디렉토리로 구성되어 있으며 hcon 환경에서 정상 구동된다.
+* 본 모듈은 Linux/Amd64 환경에서 Test 되었으며, 실행 가능한 바이너리 파일(kubenhn)과 Config 디렉토리만 있으면 정상 동작한다.
+  * hcon 환경에서 정상 동작 확인
 
 ## 사용법
 ```
