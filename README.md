@@ -14,13 +14,27 @@
   * (5) Master 노드 중 1개의 노드에 config/deploy 디렉토리 안의 스크립트 파일 실행
  * 각 과정은 순차적으로 수행되며, 실패 시 실패 원인 출력하며 모듈 동작 중지 
 
+## 사용법
+```
+mkdir ~/binary
+cd ~/binary
+cp -r ~/k8s-installer/config ./
+cp ~/k8s-installer/kubenhn ./
+kubenhn -h
+```
+<img width="252" alt="image" src="https://github.nhnent.com/storage/user/3570/files/a93465b4-93d4-4be3-88b9-ed0bfe32dfd1">
+
 ## 구성 요소 상세 설명
 * config 디렉토리
   * config.yaml
     * 인스턴스 정보, k8s 설정 정보 파일
   * k8s_setup.sh
-    * 모든 노드에 실행되는 스크립트 파일
+    * install 시 모든 노드에 실행되는 스크립트 파일
     * k8s 구성에 필요한 패키지 설치 명령어들로 구성
+    * 자유롭게 수정 가능
+  * k8s_remove.sh
+    * remove 시 모든 노드에 실행되는 스크립트 파일
+    * cluster reset 및 kubeadm, kubectl, kubelet, docker 바이너리 & 설정 파일들 삭제
     * 자유롭게 수정 가능
   * deploy
     * 스크립트 파일들이 들어있는 디렉토리
@@ -29,7 +43,18 @@
     * kubectl이 설정된 노드에서 extra_script 안에 있는 모든 스크립트 파일 자동 실행
 * kubenhn 바이너리
   * Linux/Amd64에서 동작하는 바이너리 파일
-  * ./kubenhn -h => 옵션 살펴보기
-  * ./kubenhn -f {{ Config File Directory Path }} => 지정한 Config File Directory 를 읽어 동작
-  * ./kubenhn => ./config 디렉토리를 읽어 동작 (Default 설정 값)
-<img width="437" alt="image" src="https://github.nhnent.com/storage/user/3570/files/b393c42c-aef7-42bf-a87b-b0160304565b">
+    * kubenhn -h => 옵션 살펴보기
+    * kubenhn -f {{ Config File Directory Path }} => 지정한 Config File Directory 를 읽어 동작 (Default: "./config")
+    * kubenhn -m {{ kubenhn Execute Mode }} => kubenhn 실행 모드로 install 및 remove 지원 (Default: "install")
+    * kubenhn -u {{ UserName of Instances }} => 인스턴스 접속에 필요한 계정 정보 (Default: "irteamsu")
+    * kubenhn -i {{ PemKey Path }} => 인스턴스 접속에 필요한 Pem Key 파일 경로 (Default: "")
+    * kubenhn -p {{ Password }} => 인스턴스 접속에 필요한 Password (Default: "")
+  * 동작 예시
+    ```
+    # 아래 명령어 실행 시킬 경우, "./config" 디렉토리를 읽어 "irteamsu" 계정으로 "install" 모드로 동작
+    kubenhn 
+    ```
+    ```
+    # 아래 명령어 실행 시킬 경우, "/etc/config" 디렉토리를 읽어 "sreteam" 계정 및 "/etc/mypem.key" 으로 "remove" 모드로 동작
+    kubenhn -u sreteam -f /etc/myconfig -m remove -i /etc/mypem.key
+    ```
