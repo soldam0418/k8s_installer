@@ -17,7 +17,18 @@ kubenhn -h
 
 ## 구성 요소 상세 설명
 
-<img width="252" alt="image" src="https://github.nhnent.com/storage/user/3570/files/a93465b4-93d4-4be3-88b9-ed0bfe32dfd1">
+```
+.
+├── config
+│   ├── config.yaml
+│   ├── deploy
+│   │   ├── 1_kubectl_setup.sh
+│   │   ├── 2_deploy_flannel_cni.sh
+│   │   └── 3_deploy_metric_server.sh
+│   ├── k8s_remove.sh
+│   └── k8s_setup.sh
+└── kubenhn
+```
 
 * config 디렉토리
   * config.yaml
