@@ -30,10 +30,9 @@ kubenhn -h
     * cluster reset 및 kubeadm, kubectl, kubelet, docker 바이너리 & 설정 파일들 삭제
     * 자유롭게 수정 가능
   * deploy
-    * 스크립트 파일들이 들어있는 디렉토리
+    * kubectl이 설정된 노드(master1)에서 실행되는 스크립트 파일들이 들어있는 디렉토리
     * 파일들은 1_{{ 파일 이름 }}, 2_ {{ 파일 이름 }}, 3_{{ 파일 이름 }} 으로 파일 이름 앞에 "숫자_"를 prefix로 붙임
     * 새로운 파일을 추가 하고 싶다면 4_{{ 파일 이름 }} 으로 생성
-    * kubectl이 설정된 노드에서 extra_script 안에 있는 모든 스크립트 파일 자동 실행
 * kubenhn 바이너리
   * Linux/Amd64에서 동작하는 바이너리 파일
     * kubenhn -h => 옵션 살펴보기
