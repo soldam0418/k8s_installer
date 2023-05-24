@@ -13,3 +13,5 @@ sudo rm -rf $HOME/.kube
 sudo ifconfig cni0 down
 sudo ifconfig flannel.1 down
 sudo ifconfig docker0 down
+sudo brctl delbr cni0
+sudo brctl delbr docker0
