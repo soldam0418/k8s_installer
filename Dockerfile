@@ -11,7 +11,7 @@ RUN CGO_ENABLED=0 env GOOS=linux GOARCH=amd64 go build -o kubeins main.go
 
 RUN mkdir -p /dist
 RUN cp -r /build/config /dist/config
-RUN cp /build/k8s_installer /dist/kubeins
+RUN cp /build/kubeins /dist/kubeins
 
 FROM golang:alpine3.17
 
