@@ -1,13 +1,31 @@
 #/bin/bash
-sudo swapoff -a
-sudo sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-sudo apt-get update
-sudo apt-get install -y apt-transport-https ca-certificates curl bridge-utils -y
-sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-sudo apt-get update
-sudo apt install kubeadm=1.21.0-00 kubelet=1.21.0-00 kubectl=1.21.0-00 containerd=1.3.3-0ubuntu2 docker.io=19.03.8-0ubuntu1 -y
-sudo apt-mark hold kubeadm kubelet kubectl docker
-sudo systemctl restart docker
+sudo swapoff -a && sed -i '/swap/s/&/#/' /etc/fstab
+sudo systemctl stop firewalld && sudo systemctl disable firewalld
+sudo curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo mkdir /etc/docker
+sudo cat <<EOF | sudo tee /etc/docker/daemon.json
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo sed -i -e '/disabled_plugins/ s/^/#/' /etc/containerd/config.toml
+sudo systemctl restart containerd
+sudo cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+sudo yum update
+sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+sudo systemctl daemon-reload
 sudo systemctl restart kubelet
-sudo systemctl enable docker.service
