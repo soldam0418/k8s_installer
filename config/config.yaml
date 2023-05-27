@@ -1,11 +1,7 @@
 masters:
-  - { { Master1 ip } }
-  - { { Master2 ip } }
-  - { { ... } }
+  - 3.36.116.186
 workers:
-  - { { Worker1 ip } }
-  - { { Worker2 ip } }
-  - { { ... } }
+  - 3.35.231.111
 k8s_version: v1.27.2 # used to kubeadm version option
 pod_network_cidr: 192.168.0.0/16 # current cni setting is Flannel
-control_plane_endpoint: { { LB or Proxy Server IP } }:6443
+control_plane_endpoint:
