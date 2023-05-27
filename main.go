@@ -9,12 +9,12 @@ import (
 
 func main() {
 	// Host(Linux) Build Command:
-	// env GOOS=linux GOARCH=amd64 go build -o kubenhn
+	// env GOOS=linux GOARCH=amd64 go build -o kubeins
 	var configFilePath string
 	flag.StringVar(&configFilePath, "f", src.DEFAULT_CONFIG_DIR_PATH, "Config Directory Path.")
 
 	var executeMode string
-	flag.StringVar(&executeMode, "m", src.INSTALL_MODE, "kubenhn execute mode. support [\"install\", \"remove\"]")
+	flag.StringVar(&executeMode, "m", src.INSTALL_MODE, "kubeins execute mode. support [\"install\", \"remove\"]")
 
 	var userName string
 	flag.StringVar(&userName, "u", src.USER, "Instance access user name.")

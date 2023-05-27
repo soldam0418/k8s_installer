@@ -7,11 +7,11 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod vendor
 COPY . .
-RUN CGO_ENABLED=0 env GOOS=linux GOARCH=amd64 go build -o kubenhn main.go
+RUN CGO_ENABLED=0 env GOOS=linux GOARCH=amd64 go build -o kubeins main.go
 
 RUN mkdir -p /dist
 RUN cp -r /build/config /dist/config
-RUN cp /build/k8s_installer /dist/kubenhn
+RUN cp /build/k8s_installer /dist/kubeins
 
 FROM golang:alpine3.17
 
@@ -21,4 +21,5 @@ WORKDIR /app
 
 COPY --chown=0:0 --from=builder /dist /app/
 
-CMD ["kubenhn"]
+ENTRYPOINT ["kubeins"]
+CMD [""]
